@@ -1,0 +1,1 @@
+<p>Check your configuration.  Ensure that mod_rewrite is enabled.</p>

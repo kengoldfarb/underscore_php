@@ -1,0 +1,27 @@
+### REWRITE RULES ###
+RewriteEngine on
+RewriteBase /
+
+ErrorDocument 401 /401.html
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# Asset versioning to bust CDN
+RewriteRule ^(v\d+\.\d+\.\d+)/(.*) /$2 [QSA,L]
+
+# Default action, page loaded with nothing else
+RewriteRule ^$ controllers/defaultController.php?action=index [QSA,L]
+
+# For most basic page requests, route them to the default page controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/]+)/*$ controllers/defaultController.php?action=$1 [QSA,L]
+
+# For any service requests, look in the services/ directory for the proper controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^services/([^/]+)/([^/]*)/*$ controllers/services/$1Controller.php?action=$2 [QSA,L]
+
+# All other requests, look for controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/]+)/([^/]*)/*$ controllers/$1Controller.php?action=$2 [QSA,L]
+
+### END REWRITE RULES ###
